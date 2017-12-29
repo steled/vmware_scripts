@@ -1,5 +1,0 @@
-0000000000000000000000000000000000000000 ab773dd16a089577b259c442e0a1498a33514b19 leddin <stephan.leddin@itdz-berlin.de> 1514554925 +0100	clone: from https://github.com/step-han/vmware_scripts.git
-ab773dd16a089577b259c442e0a1498a33514b19 9b09e962458a3087970e7c59b400642c810a4ee9 leddin <stephan.leddin@itdz-berlin.de> 1514555791 +0100	commit: test
-9b09e962458a3087970e7c59b400642c810a4ee9 08b0c51da524c005509b4560500aa4ff9d0ce309 leddin <stephan.leddin@itdz-berlin.de> 1514555949 +0100	commit: test successfull
-08b0c51da524c005509b4560500aa4ff9d0ce309 7f152990d70b9dc2e35cda77e3ada4adb13acde1 step-han <step_han@gmx.de> 1514562657 +0100	commit: initial commit
-7f152990d70b9dc2e35cda77e3ada4adb13acde1 f1d8443077fa47f7627a59584b11adad6c9ee719 step-han <step_han@gmx.de> 1514562886 +0100	commit: fixed values
