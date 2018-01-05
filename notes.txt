@@ -1,0 +1,1 @@
+http://jdgreen.io/rolling-reboot-vsphere-cluster-powercli/
