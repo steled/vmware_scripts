@@ -31,7 +31,7 @@ if ( !(Get-Module -Name VMware.VimAutomation.Core) ) {
          $col += $item
      }
  }
- $col #| Out-GridView
+ $col | Export-Csv C:\Users\USER\Desktop\host_information.csv -NoTypeInformation #| Out-GridView
  $col = @()
  
  Disconnect-VIServer -Confirm:$false
