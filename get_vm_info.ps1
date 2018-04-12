@@ -20,6 +20,6 @@ if ( !(Get-Module -Name VMware.VimAutomation.Core) ) {
      }
  }
  
- $out | Export-Csv -NoTypeInformation -Append -Path $csv
+ $out | ft #| Export-Csv -NoTypeInformation -Append -Path $csv
  
  Disconnect-VIServer -Confirm:$false
