@@ -15,16 +15,20 @@ $esxHosts = @("ESXHOST")
 
 
 #Connect to VIServer
-if (!($viServer = Connect-VIServer -Server $server -Credential (Get-Credential -Message "Login for $server") -ErrorAction SilentlyContinue)){
+if (!($viServer = Connect-VIServer -Server $server -Credential (Get-Credential -Message "Login for $server") -ErrorAction Stop)){
     Write-Warning "Unable to connect to VIServer. Script will be aborted."
     Write-warning $error[0].Exception.Message
     return
 }
 
 foreach ($esxHost in $esxHosts) {
-    $esxCli = Get-EsxCli -VMHost $esxHost
-    $esxCli.software.vib.install($null,$null,$null,$null,$null,$true,$null,$null,$vibPath)
-    Restart-VMHost -VMHost $esxHost -Confirm:$false
+    Try {
+        $esxCli = Get-EsxCli -VMHost $esxHost
+        $esxCli.software.vib.install($null,$null,$null,$null,$null,$true,$null,$null,$vibPath)
+        Restart-VMHost -VMHost $esxHost -Confirm:$false
+    } Catch {
+        Write-warning $error[0].Exception.Message
+    }
 }
 
 #Disconnect from VIServer
