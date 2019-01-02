@@ -15,24 +15,24 @@ if ( !(Get-Module -Name VMware.VimAutomation.Core) ) {
  $frag8 = $null
  
  $mP = "Round Robin"
- $sSW = "0"
- $sFS = "0"
- $lH = "udp://xxx.xxx.xxx.xxx:514"
- $pM = "Reject"
- $mAC = "Accept"
- $fT = "Accept"
+ $sSW = "0" #suppressShellWarning
+ $sFS = "0" #shareForceSalting
+ $lH = "udp://xxx.xxx.xxx.xxx:514" #logHost
+ $pM = "Reject" #allowPromiscuous
+ $mAC = "Accept" #macChanges
+ $fT = "Accept" #forgedTransmits
  $tS = "Enabled"
- $lB = "Route based on the originating virtual port ID"
- $nFD = "Link status only"
- $nS = "Yes"
- $f = "Yes"
- $vI = "0"
- $nDSP = "Start and stop with host"
- $nDS = "Running"
- $nCF = "Enabled"
- $sSSP = "Start and stop with host"
- $sSS = "Running"
- $sF = "Enabled"
+ $lB = "Route based on the originating virtual port ID" #loadBalancingPolicy
+ $nFD = "Link status only" #networkFailoverDetectionPolicy
+ $nS = "Yes" #notifySwitches
+ $f = "Yes" #failbackEnabled
+ $vI = "0" #vlanId
+ $nDSP = "Start and stop with host" #ntpdPolicy
+ $nDS = "Running" #ntpdRunning
+ $nCF = "Enabled" #ntpFirewall
+ $sSSP = "Start and stop with host" #vmsyslogdPolicy
+ $sSS = "Running" #vmsyslogdRunning
+ $sF = "Enabled" #syslogFirewall
  
  $suppressShellWarning = "0"
  $shareForceSalting = "0"
@@ -75,14 +75,14 @@ if ( !(Get-Module -Name VMware.VimAutomation.Core) ) {
      $advSettings += Get-AdvancedSetting -Entity ($vHost | where {$_.ConnectionState -eq "Connected"}) -Name UserVars.SuppressShellWarning | select @{N="Setting Name";E={$_.Name}}, @{N="Setting Value";E={if($_.Value -eq $suppressShellWarning ){"OK $sSW"}else{"Wrong $($_.Value)"}}}
  
      # Get AdvancedSetting ShareForceSalting
-     $advSettings += Get-AdvancedSetting -Entity ($vHost | where {$_.ConnectionState -eq "Connected"}) -Name Mem.ShareForceSalting | select @{N="Setting Name";E={$_.Name}}, @{N="Setting Value";E={$_.Value}}
+     $advSettings += Get-AdvancedSetting -Entity ($vHost | where {$_.ConnectionState -eq "Connected"}) -Name Mem.ShareForceSalting | select @{N="Setting Name";E={$_.Name}}, @{N="Setting Value";E={if($_.Value -eq $shareForceSalting ){"OK $sFS"}else{"Wrong $($_.Value)"}}}
  
      # Get AdvancedSetting logHost
      $advSettings += Get-AdvancedSetting -Entity ($vHost | where {$_.ConnectionState -eq "Connected"}) -Name Syslog.global.logHost | select @{N="Setting Name";E={$_.Name}}, @{N="Setting Value";E={if($_.Value -eq $logHost ){"OK $lH"}else{"Wrong $($_.Value)"}}}
  
      $secProfileService = @()
      $secProfileService += Get-VMHostService -VMHost $vHost | where {$_.Key -eq "ntpd"} | select @{N="Label";E={$_.Label}}, @{N="Policy";E={if($_.Policy -eq $ntpdPolicy){"OK $nDSP"}else{"Wrong $($_.Policy)"}}}, @{N="Running";E={if($_.Running -eq $ntpdRunning){"OK $nDS"}else{"Wrong $($_.Running)"}}}
-     $secProfileService += Get-VMHostService -VMHost $vHost | where {$_.Key -eq "vmsyslogd"} | select @{N="Label";E={$_.Label}}, @{N="Policy";E={if($_.Policy -eq $vmsyslogdPolicy){"OK $sSSP"}else{"Wrong $($_.Policy)"}}}, @{N="Running";E={if($_.Running -eq $ntpdRunning){"OK $sSS"}else{"Wrong $($_.Running)"}}}
+     $secProfileService += Get-VMHostService -VMHost $vHost | where {$_.Key -eq "vmsyslogd"} | select @{N="Label";E={$_.Label}}, @{N="Policy";E={if($_.Policy -eq $vmsyslogdPolicy){"OK $sSSP"}else{"Wrong $($_.Policy)"}}}, @{N="Running";E={if($_.Running -eq $vmsyslogdRunning){"OK $sSS"}else{"Wrong $($_.Running)"}}}
  
      $secProfileFirewall = @()
      $secProfileFirewall += Get-VMHostFirewallException -VMHost $vHost | where {$_.Name -eq 'NTP Client'} | select @{N="Name";E={$_.Name}}, @{N="Enabled";E={if($_.Enabled -eq $ntpFirewall){"OK $nCF"}else{"Wrong $($_.Enabled)"}}}
