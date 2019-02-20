@@ -5,6 +5,7 @@ if ( !(Get-Module -Name VMware.VimAutomation.Core) ) {
 $vCenter = "vCenter"
 #$esxHost = "ESXHost"
 #$esx = Get-VMHost -Name $esxHost
+$outFile = "C:\temp\$($vCenter).htm"
 
 $newFrags = @()
 $content = @()
@@ -232,6 +233,7 @@ function getSwitchConf {
     $networkSettings
 }
 
+#foreach($esx in Get-VMHost -Name $esxHost){
 foreach($esx in Get-VMHost){
     $cli = Get-EsxCli -VMHost $esx -V2
     if ($esx.ConnectionState -eq "Connected") {
@@ -296,5 +298,5 @@ $head += "table { margin-left:50px; }"
 $head += "</style>"
 
 #ConvertTo-Html -Head $head -Body "<h1>$($vCenter)</h1>$body" -PostContent $newFrags > C:\tmp\$($vCenter).htm
-ConvertTo-Html -Head $head -Body "<h1>$($vCenter)</h1>$body" -PostContent $content > C:\temp\$($vCenter).htm
+ConvertTo-Html -Head $head -Body "<h1>$($vCenter)</h1>$body" -PostContent $content > $outFile
 Disconnect-VIServer -Confirm:$false
